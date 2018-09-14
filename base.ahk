@@ -10,7 +10,11 @@ CapsLock::Backspace
   Return
 
 ; Alt+Shift+R - Reload AutoHotkey script
-!+r::Reload
+!+r::
+  TrayTip Autohotkey, Script reloaded
+  Sleep 2000
+  HideTrayTip()
+  Reload
 
 ; Empty trash
 #Del::FileRecycleEmpty ; win + del
