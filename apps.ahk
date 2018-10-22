@@ -28,15 +28,15 @@ WinShortcut(Path){
 ^!c::	appToggle("C:\Program Files (x86)\Google\Chrome\Application\chrome.exe")
 
 ; Ctrl+Alt+T - Telegram
-^!t::	appToggle("C:\Users\amedv\AppData\Roaming\Telegram Desktop\Telegram.exe")
+^!t::	appToggle("C:\Users\Hard\AppData\Roaming\Telegram Desktop\Telegram.exe")
 
 ; Ctrl+Alt+V - VS Code
-^!e::	appToggle("C:\Users\amedv\AppData\Local\Programs\Microsoft VS Code Insiders\Code - Insiders.exe")
+^!e::	appToggle("C:\Users\Hard\AppData\Local\Programs\Microsoft VS Code Insiders\Code - Insiders.exe")
 ; ^!e::	appToggle("C:\Users\Artem Medvedev\AppData\Local\Programs\Microsoft VS Code\Code.exe")
 ; ^!e:: appToggle("C:\Program Files\Sublime Text 3\sublime_text.exe")
 
 ; Ctrl+Alt+S - Spotify
-^!s:: appToggle("C:\Users\Artem Medvedev\AppData\Roaming\Spotify\Spotify.exe")
+^!s:: appToggle("C:\Users\Hard\AppData\Roaming\Spotify\Spotify.exe")
 
 ; ^!s::
 ; WinGetPos, x,,,,ahk_exe Spotify.exe

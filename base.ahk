@@ -7,7 +7,7 @@ CapsLock::Backspace
 ; Win+Q alias to Alt+F4
 !q::
   Send,{alt down}{F4}{alt up}
-  Return
+  return
 
 ; Alt+Shift+R - Reload AutoHotkey script
 !+r::
@@ -22,7 +22,7 @@ return
 
 ; Always on Top
 ^!f:: Winset, Alwaysontop, , A ; ctrl + space
-Return
+return
 
 ; Win+Space to change keyboard language
 ; #Space::
