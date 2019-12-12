@@ -1,110 +1,134 @@
+; This AutoHotkey script is to Open, Restore or Minimize the desires Apps using the configured shortcuts key
+; There are three functions you can use for this:
+;
+; 1) OpenOrShowAppBasedOnExeName(AppAddress)                       // regular Window Apps
+; 2) OpenOrShowAppBasedOnWindowTitle(WindowTitleWord, AppAddress)  // Chrome Apps and Chrome Shortcuts
+; 3) OpenOrShowAppBasedOnAppModelUserID(AppTitle, AppModelUserID)  // Windows Store Apps (contained in the "shell:AppsFolder\")
+;
+; Alt + ` switching between open Windows of the same "type" and same App
+; The "type" checking is based on the App's Title convention that stipulates that the App name should be at the end of the Window title (Eg: New Document - Word )
+
 ; --------------------------------------------------------------
 ; Functions
 ; --------------------------------------------------------------
-appToggle(exe) {
-  IfWinExist, ahk_exe %exe%
+#WinActivateForce ; Prevent task bar buttons from flashing when different windows are activated quickly one after the other.
+
+; AppAddress: The address to the .exe (Eg: "C:\Windows\System32\SnippingTool.exe")
+OpenOrShowAppBasedOnExeName(AppAddress) {
+	AppExeName := SubStr(AppAddress, InStr(AppAddress, "\", false, -1) + 1)
+
+	IfWinExist ahk_exe %AppExeName%
+	{
+
 		IfWinActive
+		{
 			WinMinimize
+			Return
+		}
 		else
+		{
 			WinActivate
+			Return
+		}
+
+	}
 	else
-		Run, %exe%
+	{
+		Run, %AppAddress%, UseErrorLevel
+      If ErrorLevel
+      {
+        Msgbox, File %AppAddress% Not Found
+        Return
+      }
+		else
+		{
+			WinWait, ahk_exe %AppExeName%
+			WinActivate ahk_exe %AppExeName%
+			Return
+		}
+	}
 }
 
-WinShortcut(Path){
-  IfWinExist, %Path%
+; WindowTitleWord: Usually the word at the end of the app window title (Eg: in: "New Document - Word" will be "Word")
+; AppAddress: The address to the .exe (Eg: "C:\Windows\System32\SnippingTool.exe")
+OpenOrShowAppBasedOnWindowTitle(WindowTitleWord, AppAddress)
+{
+	SetTitleMatchMode, 2
+  IfWinExist, %WindowTitleWord%
   {
-    WinActivate, %Path%
-    return 1
+    IfWinActive
+    {
+      WinMinimize
+      Return
+    }
+    else
+    {
+      WinActivate
+      Return
+    }
+
   }
-  Run explorer.exe %Path%
-  return 0
+  else
+  {
+    Run, %AppAddress%, UseErrorLevel
+    If ErrorLevel
+    {
+      Msgbox, File %AppAddress% Not Found
+      Return
+    }
+    else
+    {
+      WinActivate
+      Return
+    }
+  }
 }
+
+; AppTitle: Usually the word at the end of the app window title(Eg: in: "New Document - Word" will be "Word")
+; AppModelUserID: A comprehensive guide on how to find the AppModelUserID of a windows store app can be found here: https://jcutrer.com/windows/find-aumid
+OpenOrShowAppBasedOnAppModelUserID(AppTitle, AppModelUserID)
+{
+	SetTitleMatchMode, 2
+  IfWinExist, %AppTitle%
+  {
+    IfWinActive
+    {
+      WinMinimize
+      Return
+    }
+    else
+    {
+      WinActivateBottom %AppTitle%
+    }
+  }
+  else
+  {
+    Run, shell:AppsFolder\%AppModelUserID%, UseErrorLevel
+    If ErrorLevel
+    {
+      Msgbox, File %AppModelUserID% Not Found
+      Return
+    }
+  }
+}
+
+ExtractAppTitle(FullTitle)
+{
+	AppTitle := SubStr(FullTitle, InStr(FullTitle, " ", false, -1) + 1)
+	Return AppTitle
+}
+
 
 ; --------------------------------------------------------------
 ; Toggle Apps
 ; --------------------------------------------------------------
-; Ctrl+Alt+C - Google Chrome
-^!c::	appToggle("C:\Program Files (x86)\Google\Chrome\Application\chrome.exe")
+;^!c:: OpenOrShowAppBasedOnExeName("%A_ProgramFiles%\Mozilla Firefox\firefox.exe")
+^!e:: OpenOrShowAppBasedOnExeName("%A_AppData%\Local\Programs\Microsoft VS Code Insiders\Code - Insiders.exe")
+^!f:: OpenOrShowAppBasedOnExeName("%WinDir%\explorer.exe")
 
-; Ctrl+Alt+T - Telegram
-^!t::	appToggle("C:\Users\Hard\AppData\Roaming\Telegram Desktop\Telegram.exe")
+; F8 - Open||Show "Gmail as Chrome App"
+; F8:: OpenOrShowAppBasedOnWindowTitle("Gmail", "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe --app=https://mail.google.com/mail/")
 
-; Ctrl+Alt+V - VS Code
-^!e::	appToggle("C:\Users\Hard\AppData\Local\Programs\Microsoft VS Code Insiders\Code - Insiders.exe")
-; ^!e::	appToggle("C:\Users\Artem Medvedev\AppData\Local\Programs\Microsoft VS Code\Code.exe")
-; ^!e:: appToggle("C:\Program Files\Sublime Text 3\sublime_text.exe")
-
-; Ctrl+Alt+S - Spotify
-^!s:: appToggle("C:\Users\Hard\AppData\Roaming\Spotify\Spotify.exe")
-
-; ^!s::
-; WinGetPos, x,,,,ahk_exe Spotify.exe
-; if !x
-; {
-;     DetectHiddenWindows, On
-;     WinGet, windows, List, ahk_exe Spotify.exe
-;     Loop, %windows% {
-;         winId := windows%A_Index%
-;         WinGetTitle, title, ahk_id %winId%
-;         if (title != "" && title != "GDI+ Window" && title != "MSCTFIME UI" && title != "Default IME")
-;             WinShow %title%
-;     }
-;     DetectHiddenWindows, Off
-; }
-; else
-; {
-;     WinGet, windows, List, ahk_exe Spotify.exe
-;     Loop, %windows% {
-;         winId := windows%A_Index%
-;         WinGetTitle, title, ahk_id %winId%
-;         if (title != "" && title != "GDI+ Window" && title != "MSCTFIME UI" && title != "Default IME")
-;             WinHide %title%
-;     }
-; }
-
-; --------------------------------------------------------------
-; Google Chrome
-; --------------------------------------------------------------
-#IfWinActive, ahk_class Chrome_WidgetWin_1
-  !1::Send {XButton1} ; Alt+1 Go Back
-  !2::Send {XButton2} ; Alt+2 Go Forward
-  return
-#IfWinActive
-
-; Forward and Back Navigation with Mouse Buttons
-~LButton & ~RButton:: ; Browser_Forward
-  Send, {XButton2}
-  return
-~RButton & ~LButton:: ; Browser_Back
-  Send, {XButton1}
-  return
-
-; --------------------------------------------------------------
-; CMD
-; --------------------------------------------------------------
-; Close cmd window
-#IfWinActive, ahk_class ConsoleWindowClass
-  !q::WinClose, A   ; Alt+q
-#IfWinActive
-
-; --------------------------------------------------------------
-; Explorer
-; --------------------------------------------------------------
-; Press middle mouse button to move up a folder in Explorer
-#IfWinActive, ahk_class CabinetWClass
-  ~MButton::Send !{Up}
-#IfWinActive
-return
-
-; Open Downloads folder
-!+l::Run "C:\Users\amedv\Downloads" ; ctrl+shift+d
-return
-
-; Win+Shift+E - Explorer
-; #+e::	appToggle("%SystemRoot%\explorer.exe")
-; #e:: Run explorer.exe "C:\Users\User\Downloads"
-; Empty trash
-
-; Win+Shift+Q - Toggle Q-Dir
-; ^!q:: appToggle("C:\Program Files\Q-Dir\Q-Dir.exe")
+; F9 - Open||Show "Windows store Calculator app"
+; F9:: OpenOrShowAppBasedOnAppModelUserID("Calculator", "Microsoft.WindowsCalculator_8wekyb3d8bbwe!App")
+; ^!f:: OpenOrShowAppBasedOnAppModelUserID("Exploirer", "Microsoft.WindowsCalculator_8wekyb3d8bbwe!App")

@@ -1,0 +1,4 @@
+test*.ahk
+local.ahk
+tmp/
+test.ahk

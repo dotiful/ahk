@@ -1,0 +1,9 @@
+[submodule "ext/AHKHID"]
+	path = ext/AHKHID
+	url = https://github.com/jleb/AHKHID
+[submodule "ext/screenkey"]
+	path = ext/screenkey
+	url = https://github.com/mihaifm/screenkey.ahk
+[submodule "ext/panel"]
+	path = ext/panel
+	url = https://github.com/Joonikko/Panel
