@@ -38,38 +38,5 @@ CapsLock::Backspace
 ; Alt+Shift+L Open ~/dev folder
 ;!+d::Run "C:\Users\%A_UserName%\dev"
 
-; --------------------------------------------------------------
-; Explorer
-; --------------------------------------------------------------
-#IfWinActive, ahk_class CabinetWClass
-  ~MButton::Send !{Right} ; middle click to Go Forward
-
-	; F1::Send !{up}
-	^1::Send ^+5 ; List
-	^2::Send ^+6 ; Details
-	^3::Send ^+4 ; Small Icons
-	^4::Send ^+7 ; Tiles
-	^5::Send ^+3 ; Medium Icons
-	^6::Send ^+2 ; Large icons
-	^7::Send ^+8 ; Content
-	^8::Send ^+1 ; Extra large icons
-
-  !n::Send !d!vn{enter}ln ; toggle sidebar
-  !p::Send !d!vp          ; toggle preview
-#IfWinActive
-
-; --------------------------------------------------------------
-; Chrome
-; --------------------------------------------------------------
-#IfWinActive ahk_exe chrome.exe
-  ::cce::chrome://extensions/{Enter}
-  ::ccs::chrome://settings/{Enter}
-  ::ccw::https://chrome.google.com/webstore{Enter}
-  ::cca::chrome://settings/help{Enter}
-  ::ccb::chrome://bookmarks{Enter}
-  !WheelDown:: SendInput,{CtrlDown}{Tab}{CtrlUp}
-  !WheelUp:: SendInput, {CtrlDown}{ShiftDown}{Tab}{ShiftUp}{CtrlUp}
-#IfWinActive
-
 
 ; LControl & RAlt::Send {Alt}

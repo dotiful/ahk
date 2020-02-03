@@ -50,13 +50,19 @@
 ; Center Window
 ; --------------------------------------------------------------
 ; Alt+Shift+C
-!^c::
+!#c::
 	WinGetActiveStats, cT, cW, cH, cX, cY
 	SysGet, mon, MonitorWorkArea
 	newX	:= (monRight - cW) / 2
 	newY	:= (monBottom - cH) / 2
 	WinMove, % cT, , % newX, newY
   return
+
+; --------------------------------------------------------------
+; FullScreen Window
+; --------------------------------------------------------------
+; Alt+Win+F
+!#f::Send, {LWinDown}{Up}{LWinUp}
 
 ; --------------------------------------------------------------
 ; Keep a Window on top
@@ -70,13 +76,13 @@
 ;********************************************************************************
 ; Resize Window by 1/2 - 1/3 - 2/3
 ;********************************************************************************
-; Win+Left
-#Left::
+; Akt+Win+Left
+!#Left::
 	MoveCycleLeft(-1)
   return
 
-; Win+Right
-#Right::
+; Akt+Win+Right
+!#Right::
 	MoveCycleRight(1)
   return
 

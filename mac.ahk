@@ -38,45 +38,34 @@ LWin::return ; (or run Launchy)
 !+[::Send {Ctrl Down}{Shift Down}{Tab Down}{Tab Up}{Shift Up}{Ctrl Up}
 !l::Send ^l
 ; tabs switching
-^!Left::Send {LCtrl down}{LShift down}{Tab}{LShift up}{LCtrl up}
-^!Right::Send {LCtrl down}{Tab}{LCtrl up}
+^!Left::Send {LCtrl Down}{LShift Down}{Tab}{LShift Up}{LCtrl Up}
+^!Right::Send {LCtrl Down}{Tab}{LCtrl Up}
 
-; navigation, selection, delete a word/till end
-!Left::Send {Home}
-!Right::Send {End}
-!Up::Send {Lctrl down}{Home}{Lctrl up}
-!Down::Send {Lctrl down}{End}{Lctrl up}
+#IfWinNotActive, ahk_class CabinetWClass
+  ; navigation, selection, delete a word/till end
+  !Left::Send {Home}
+  !Right::Send {End}
+  !Up::Send {Lctrl Down}{Home}{Lctrl Up}
+  !Down::Send {Lctrl Down}{End}{Lctrl Up}
+#IfWinNotActive
 
-#Left::Send {ctrl down}{Left}{ctrl up}
-#Right::Send {ctrl down}{Right}{ctrl up}
+#Left::Send {Ctrl Down}{Left}{Ctrl Up}
+#Right::Send {Ctrl Down}{Right}{Ctrl Up}
+#Down::Send {AltDown} {Down} {AltUp}
+#Up::Send {AltDown} {Up} {AltUp}
 
-#+Left::Send {ctrl down}{shift down}{Left}{shift up}{ctrl up}
-#+Right::Send {ctrl down}{shift down}{Right}{shift up}{ctrl up}
+#+Left::Send {Ctrl Down}{Shift Down}{Left}{Shift Up}{Ctrl Up}
+#+Right::Send {Ctrl Down}{Shift Down}{Right}{Shift Up}{Ctrl Up}
 
-!+Left::Send {shift down}{Home}{shift up}
-!+Right::Send {shift down}{End}{shift up}
-!+Up::Send {Ctrl Down}{shift down}{Home}{shift up}{Ctrl Up}
-!+Down::Send {Ctrl Down}{shift down}{End}{shift up}{Ctrl Up}
+!+Left::Send {Shift Down}{Home}{Shift Up}
+!+Right::Send {Shift Down}{End}{Shift Up}
+!+Up::Send {Ctrl Down}{Shift Down}{Home}{Shift Up}{Ctrl Up}
+!+Down::Send {Ctrl Down}{Shift Down}{End}{Shift Up}{Ctrl Up}
 
 ; command-delete deletes whole line
-!BS::Send {LShift down}{Home}{LShift Up}{Del}
+!BS::Send {LShift Down}{Home}{LShift Up}{Del}
 ; alt-delete deletes previous word
-#BS::Send {LCtrl down}{BS}{LCtrl up}
+#BS::Send {LCtrl Down}{BS}{LCtrl Up}
 
-; Language switching
-; NB! The trick here is to send winkey/ctrl up at the proper time
-; ^Space::Send {LAlt down}{LCtrl up}{LShift down}{LShift up}{LAlt up}
-
-; input methods
-; $+,::Send ^,
-; ; $+.::Send ^.
-; !Space::
-  ; WinWait, Program Manager,
-  ; Send, {LWin Down}{Space}{LWin Up}
-; !Space::Send {Ctrl Down}{LWin Down}{Space}{LWin Up}{Ctrl Up}
-
-
-; Alt+Space to change keyboard language
-; !Space::
-;   WinWait, Program Manager,
-;   Send, {CTRLDOWN}{SHIFTDOWN}{SHIFTUP}{CTRLUP}
+; change keyboard language
+!Space::Send {LAlt down}{LShift down}{LShift up}{LAlt up}
