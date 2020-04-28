@@ -112,20 +112,47 @@ OpenOrShowAppBasedOnAppModelUserID(AppTitle, AppModelUserID)
   }
 }
 
-ExtractAppTitle(FullTitle)
-{
-	AppTitle := SubStr(FullTitle, InStr(FullTitle, " ", false, -1) + 1)
-	Return AppTitle
-}
-
-
 ; --------------------------------------------------------------
 ; Toggle Apps
 ; --------------------------------------------------------------
-^!c:: OpenOrShowAppBasedOnExeName("C:\Program Files\Mozilla Firefox\firefox.exe")
-^!e:: OpenOrShowAppBasedOnExeName("C:\Users\User\AppData\Local\Programs\Microsoft VS Code Insiders\Code - Insiders.exe")
-^!f:: OpenOrShowAppBasedOnExeName("%WinDir%\explorer.exe")
-^!t:: OpenOrShowAppBasedOnExeName("C:\Program Files\ConEmu\ConEmu64.exe")
+^!c:: OpenOrShowAppBasedOnExeName("chrome.exe")
+^!e:: OpenOrShowAppBasedOnExeName("D:\e2backups\port\PortableApps\SublimeText\App\SublimeText\sublime_text.exe")
+^!f:: OpenOrShowAppBasedOnExeName("D:\e2backups\port\PortableApps\FreeCommanderXE\App\FreeCommanderXE\FreeCommander.exe")
+; ^!f:: OpenOrShowAppBasedOnExeName("%WinDir%\explorer.exe")
+; ^!t:: OpenOrShowAppBasedOnExeName("C:\Program Files\ConEmu\ConEmu64.exe")
+; ^!q:: OpenOrShowAppBasedOnExeName("C:\Users\User\AppData\Roaming\Telegram Desktop\Telegram.exe")
+; ^!q:: OpenOrShowAppBasedOnExeName("C:\Users\User\AppData\Roaming\Telegram Desktop\Telegram.exe")
+
+; --------------------------------------------------------------
+; CmdQuit
+; --------------------------------------------------------------
+; Alt+Q - quit
+; GroupAdd, CmdQuit, ahk_class ConsoleWindowClass
+; GroupAdd, CmdQuit, ahk_class Notepad
+; GroupAdd, CmdQuit, ahk_class CabinetWClass
+; return
+
+; #IfWinActive ahk_group CmdQuit
+;   ; Alt+Q - quit
+;   !q::WinClose, A
+; #IfWinActive
+
+; #If WinActive("ahk_class ConsoleWindowClass") || WinActive("ahk_class Notepad") || WinActive("ahk_class CabinetWClass")
+;   !q::WinClose, A
+
+; !q::
+;   Send, {Alt Down}{F4 Down}{F4 Up}{Alt Up}
+;   Send, {F4 Up}{Alt Up}
+; return
+; !q::
+;     WinClose ; use the window found above
+;   ; PostMessage, 0x112, 0xF060,,, WinTitle, WinText  ; 0x112 = WM_SYSCOMMAND, 0xF060 = SC_CLOSE
+; return
+
+if WinExist("ahk_class TaskManagerWindow") or WinExist("ahk_class CabinetWClass") or WinExist("ahk_class ConsoleWindowClass")
+  !q::
+    Send, {Alt Down}{F4 Down}{F4 Up}{Alt Up}
+  return
 
 ; --------------------------------------------------------------
 ; Explorer
@@ -145,6 +172,8 @@ ExtractAppTitle(FullTitle)
 
   !n::Send !d!vn{enter}ln ; toggle sidebar
   !p::Send !d!vp          ; toggle preview
+
+  ^l::ControlClick,ToolbarWindow322
 #IfWinActive
 
 ; --------------------------------------------------------------
@@ -159,9 +188,14 @@ ExtractAppTitle(FullTitle)
     sleep 100
     SendInput {Enter}
 
-  :*:;ac::about:config
-  :*:;ap::about:profiles
-  :*:;aa::about:about
+  :*:;ac::about:config{Enter}
+  :*:;ap::about:profiles{Enter}
+  :*:;aa::about:about{Enter}
+
+  F1::
+    Send, ^t
+    Sleep 50
+    Send about:config{Enter}
 #IfWinActive
 
 ; --------------------------------------------------------------
@@ -180,10 +214,7 @@ ExtractAppTitle(FullTitle)
 ; --------------------------------------------------------------
 ; CMD
 ; --------------------------------------------------------------
-#IfWinActive, ahk_class ConsoleWindowClass
-  ; Alt+Q - quit
-  !q::WinClose, A
-
+; #IfWinActive, ahk_class ConsoleWindowClass
   /*
   ; Ctrl+v - paste
   ; ^v::SendInput {Raw}%clipboard%
@@ -194,7 +225,10 @@ ExtractAppTitle(FullTitle)
   ; Ctrl+l for clear
 	; ^l::SendInput, {Esc}cls{Enter}
   */
-#IfWinActive
+; #IfWinActive
+; #IfWinActive, ahk_class ConsoleWindowClass
+;   !q::WinClose, A   ; Alt+q
+; #IfWinActive
 
 
 ; ^!1::GoSub, FocusOrStartConEmu

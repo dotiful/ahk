@@ -1,8 +1,22 @@
 ; --------------------------------------------------------------
+; Switch between windows of the same app
+; --------------------------------------------------------------
+!`::
+  WinGetClass, ActiveClass, A
+  WinSet, Bottom,, A
+  WinActivate, ahk_class %ActiveClass%
+return
+
+!+`::
+  WinGetClass, ActiveClass, A
+  WinActivateBottom, ahk_class %ActiveClass%
+return
+
+; --------------------------------------------------------------
 ; Toggle Hide/Show frontmost window
 ; --------------------------------------------------------------
-; Win+W
-#w::
+; Win+Shift+W
+#+w::
   IfWinNotExist, ahk_id %selected_id%
   {
     If (IsWindow(WinExist("A")) || WinActive("ahk_class ArtRage 3"))
@@ -14,14 +28,14 @@
     }
   }
   WinGet, WinState, MinMax, ahk_id %selected_id%
-    If WinState = -1    ; the selected window is minimized
-    {
-      WinRestore
-      selected_id := ""
-    }
-    else
-      WinMinimize
-  return
+  If WinState = -1    ; the selected window is minimized
+  {
+    WinRestore
+    selected_id := ""
+  }
+  else
+    WinMinimize
+return
 
   IsWindow(hwnd){
     WinGet, s, Style, ahk_id %hwnd%
@@ -31,8 +45,8 @@
 ; --------------------------------------------------------------
 ; Hide frontmost Window
 ; --------------------------------------------------------------
-; Win+H
-#h::
+; Win+W
+#w::
   lastWindows:=[]
   lastWindows.Insert(lastWindow:=WinExist("A"))
   WinGet,MinMax,MinMax,ahk_id %lastWindow%
@@ -56,7 +70,7 @@
 	newX	:= (monRight - cW) / 2
 	newY	:= (monBottom - cH) / 2
 	WinMove, % cT, , % newX, newY
-  return
+return
 
 ; --------------------------------------------------------------
 ; FullScreen Window
@@ -71,20 +85,47 @@
 ^!+f::
   Winset, Alwaysontop, , A
   Notify("Alwaysontop", "State toggled")
-  return
+return
 
-;********************************************************************************
+; --------------------------------------------------------------
+; Toggle Maximize/Restore
+; --------------------------------------------------------------
+#WheelDown::
+  ToggleMaximize()
+return
+
+#WheelUp::
+  ToggleMaximize()
+return
+
+ToggleMaximize() {
+  if (WinActive("ahk_class Progman") || WinActive("ahk_Class DV2ControlHost") || (WinActive("Start") && WinActive("ahk_class Button")) || WinActive("ahk_class Shell_TrayWnd"))
+    return
+  WinGet, Stat, MinMax, A
+  if Stat = 1
+    WinRestore, A
+  else
+   WinMaximize, A
+}
+
+#RButton::
+  WinGet, Stat, MinMax, A
+  if Stat = 1
+    WinMinimize, A
+return
+
+; --------------------------------------------------------------
 ; Resize Window by 1/2 - 1/3 - 2/3
-;********************************************************************************
-; Akt+Win+Left
+; --------------------------------------------------------------
+; Alt+Win+Left
 !#Left::
 	MoveCycleLeft(-1)
-  return
+return
 
-; Akt+Win+Right
+; Alt+Win+Right
 !#Right::
 	MoveCycleRight(1)
-  return
+return
 
 MoveCycleLeft(Add) {
 	static SizeCycle = 0
@@ -136,7 +177,6 @@ MoveWindow(XP, WP) {
 	WinRestore, %WinTitle%
 	WinMove, %WinTitle%,, %XNew%, 0, %WNew%, %HNew%
 }
-
 
 ; Ctrl+Alt+scroll transparency
 {
@@ -267,25 +307,3 @@ MoveWindow(XP, WP) {
 
 return
 
-
-; ; Alt + ` -  Activate NEXT Window of same type (title checking) of the current APP
-; !`::
-;   WinGet, ActiveProcess, ProcessName, A
-;   WinGet, OpenWindowsAmount, Count, ahk_exe %ActiveProcess%
-
-; If OpenWindowsAmount = 1  ; If only one Window exist, do nothing
-;   Return
-; Else
-; 	{
-; 		WinGetTitle, FullTitle, A
-; 		AppTitle := ExtractAppTitle(FullTitle)
-
-; 		SetTitleMatchMode, 2
-; 		WinGet, WindowsWithSameTitleList, List, %AppTitle%
-
-; 		If WindowsWithSameTitleList > 1 ; If several Window of same type (title checking) exist
-; 		{
-; 			WinActivate, % "ahk_id " WindowsWithSameTitleList%WindowsWithSameTitleList%	; Activate next Window
-; 		}
-; 	}
-; Return

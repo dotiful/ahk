@@ -11,10 +11,6 @@
 ; # = WIN
 ;
 
-; Disable start menu on left winkey
-LWin & vk07::return
-LWin::return ; (or run Launchy)
-
 ; Universal shotcuts
 !x::Send ^x
 !c::Send ^c

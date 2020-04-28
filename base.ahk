@@ -1,19 +1,28 @@
 ; --------------------------------------------------------------
+; AutoHotkey related
+; --------------------------------------------------------------
+; Alt+Shift+R - Reload AHK
+^+r::
+  Reload
+  Notify("Autohotkey", "Script reloaded")
+
+; Win + scrollLock - Suspend
+#ScrollLock::
+  Suspend
+  return
+
+; --------------------------------------------------------------
 ; Base remmaping
 ; --------------------------------------------------------------
 ; Remap CapsLock to Backspace
 CapsLock::Backspace
 
-; Win+Q alias to Alt+F4
-;!q::SendInput !{F4}
-; !q::Send !{F4}
-; !q::SendEvent !{F4}
+; Disable winkey start menu
+LWin & vk07::return
+LWin::return
 
-; Alt+Shift+R - Reload AutoHotkey script
-; ^+r::
-^+r::
-  Notify("Autohotkey", "Script reloaded")
-  reload
+; Both Shift toggle CapsLock
+LShift & RShift::CapsLock
 
 ; Win+Del Empty trash
 #Del::
@@ -21,10 +30,13 @@ CapsLock::Backspace
   SoundPlay, %A_ScriptDir%\sounds\recycle.wav
   return
 
-; Alt+Space to change keyboard language
-; !Space::
-;   WinWait, Program Manager,
-;   Send, {CTRLDOWN}{SHIFTDOWN}{SHIFTUP}{CTRLUP}
+; Win+Space to change keyboard language
+; #Space::
+;   Sleep 300
+;   PostMessage, 0x50, 2, 0,, A ; 0x50 is WM_INPUTLANGCHANGEREQUEST
+;   return
+
+
 
 ; --------------------------------------------------------------
 ; Open Folders
@@ -33,10 +45,9 @@ CapsLock::Backspace
 !+h::Run "C:\Users\%A_UserName%\"
 
 ; Alt+Shift+L Open Downloads folder
-!+l::Run "C:\Users\%A_UserName%\Downloads"
+; !+l::Run "C:\Users\%A_UserName%\Downloads"
 
-; Alt+Shift+L Open ~/dev folder
+!+l::Run Explorer /select`,"c:\users\User\code"
+
 ;!+d::Run "C:\Users\%A_UserName%\dev"
-
-
 ; LControl & RAlt::Send {Alt}

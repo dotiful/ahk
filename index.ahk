@@ -7,8 +7,8 @@ SendMode Input              ; Recommended for new scripts due to its superior sp
 SetWorkingDir %A_ScriptDir% ; Ensures a consistent starting directory.
 ; #Warn                       ; Enable warnings to assist with detecting common errors.
 
-; SetTitleMatchMode RegEx     ;
-; DetectHiddenWindows, On     ; Determines whether invisible windows are "seen" by the script.
+SetTitleMatchMode RegEx     ; Sets the matching behavior of the WinTitle parameter in commands such as WinWait.
+DetectHiddenWindows, On     ; Determines whether invisible windows are "seen" by the script.
 
 ; --------------------------------------------------------------
 ; Hotkey Modifier Symbols
@@ -31,7 +31,7 @@ If FileExist(FullFilePath)
 }
 
 #Include helpers.ahk
-#Include mac.ahk
+; #Include mac.ahk
 #Include base.ahk
 #Include apps.ahk
 #Include media.ahk
