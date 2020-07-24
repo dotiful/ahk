@@ -1,6 +1,12 @@
 [submodule "ext/AHKHID"]
 	path = ext/AHKHID
 	url = https://github.com/jleb/AHKHID
+[submodule "ext/Clipjump"]
+	path = ext/Clipjump
+	url = https://github.com/aviaryan/Clipjump
+[submodule "ext/CL3"]
+	path = ext/CL3
+	url = https://github.com/hi5/CL3
 [submodule "ext/screenkey"]
 	path = ext/screenkey
 	url = https://github.com/mihaifm/screenkey.ahk

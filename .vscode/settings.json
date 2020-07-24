@@ -1,0 +1,12 @@
+{
+  "search.exclude": {
+    "tmp": true
+  },
+  "files.defaultLanguage": "ahk",
+    "code-runner.executorMap": {
+      "ahk": "\"C:\\Program Files\\AutoHotkey\\AutoHotkeyU64.exe\"",
+    },
+    "code-runner.showExecutionMessage": false,
+    "code-runner.clearPreviousOutput": true,
+    "code-runner.runInTerminal": true
+}
