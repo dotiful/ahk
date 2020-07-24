@@ -5,9 +5,9 @@
 ^+WheelUp::Send   {Volume_Up}                      ; Ctrl+Shift+Scroll down
 ^+MButton::Send   {Volume_Mute}                    ; Ctrl+Shift+Middle click
 
-!+MButton::Send   {Media_Play_Pause}               ; Alt+Shift+MiddleClick
-^+LButton::Send   {Media_Prev}                     ; Ctrl+Shift+LeftClick
-^+RButton::Send   {Media_Next}                     ; Ctrl+Shift+RightClick
+; !+MButton::Send   {Media_Play_Pause}               ; Alt+Shift+MiddleClick
+; ^+LButton::Send   {Media_Prev}                     ; Ctrl+Shift+LeftClick
+; ^+RButton::Send   {Media_Next}                     ; Ctrl+Shift+RightClick
 
 !F7::Send         {Media_Prev}                     ; Alt+F7
 !F8::Send         {Media_Play_Pause}               ; Alt+F8

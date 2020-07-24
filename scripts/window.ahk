@@ -1,8 +1,9 @@
-
-
 #a::
   WinGetClass, class, A
   MsgBox, The active window's class is "%class%".
+
+  ; WinGetClass, Var ,A
+  ; MsgBox ahk_class %Var%
   Return
 
 ; --------------------------------------------------------------
