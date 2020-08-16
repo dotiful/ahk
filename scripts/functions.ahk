@@ -13,8 +13,7 @@
 
 */
 
-Edit(file)
-{
+Edit(file) {
 	global
     Run % Settings.EditorPath " " file
 }

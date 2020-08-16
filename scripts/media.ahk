@@ -1,6 +1,17 @@
-; --------------------------------------------------------------
-; Multimedia
-; --------------------------------------------------------------
+/*
+  Multimedia
+
+  Modifiers:
+    +  - Shift
+    ^  - Ctrl
+    #  - Win
+    !  - Alt
+    &  - combine multiple keys
+    <> - left/right key of the pair
+    *  - fire the hotkey even if extra modifiers are being held down
+    ~  - do not block the key's native function
+*/
+
 ^+WheelDown::Send {Volume_Down}                    ; Ctrl+Shift+Scroll up
 ^+WheelUp::Send   {Volume_Up}                      ; Ctrl+Shift+Scroll down
 ^+MButton::Send   {Volume_Mute}                    ; Ctrl+Shift+Middle click

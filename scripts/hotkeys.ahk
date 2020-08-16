@@ -1,13 +1,11 @@
 /*
- Hotkey Documentation: http://ahkscript.org/docs/Hotkeys.htm
+  Hotkey Documentation:
+  https://autohotkey.com/docs/Hotkeys.html
+  https://autohotkey.com/docs/KeyList.htm
 
- Examples:
+  Examples:
 
- #n::Run, Notepad
-
- #n::
-    Run, Notepad
- Return
+  #n::Run, Notepad
 
   Alt::Return ;Disables the key alt when it's pressed alone
   !x:: ;alt+x works
@@ -15,16 +13,22 @@
   ToolTip,% A_ThisHotkey
   Return
 
- Modifiers:
-   ^ - Ctrl
-   ! - Alt
-   + - Shift
-   # - Win
-
+  Modifiers:
+    +  - Shift
+    ^  - Ctrl
+    #  - Win
+    !  - Alt
+    &  - combine multiple keys
+    <> - left/right key of the pair
+    *  - fire the hotkey even if extra modifiers are being held down
+    ~  - do not block the key's native function
 */
 
 ; Reload entire script
-#Esc::Reload
+#Esc::
+  Reload
+  ; Notify("Autohotkey", "Script reloaded",-3)
+  Return
 
 #1::ListLines
 #2::ListVars

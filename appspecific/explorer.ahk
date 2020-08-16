@@ -1,5 +1,34 @@
+/*
+  Hotkey Documentation: http://ahkscript.org/docs/Hotkeys.htm
+
+  Examples:
+
+  Modifiers:
+    +  - Shift
+    ^  - Ctrl
+    #  - Win
+    !  - Alt
+    &  - combine multiple keys
+    <> - left/right key of the pair
+    *  - fire the hotkey even if extra modifiers are being held down
+    ~  - do not block the key's native function
+*/
+
+; --------------------------------------------------------------
+; Open Folders
+; --------------------------------------------------------------
+; Alt+Shift+H Open Home folder
+!+h::Run "C:\Users\%A_UserName%\"
+
+; Alt+Shift+L Open Downloads folder
+!+l::Run "C:\Users\%A_UserName%\Downloads"
+
+;!+d::Run "C:\Users\%A_UserName%\dev"
+; LControl & RAlt::Send {Alt}
+
+
 #IfWinActive, ahk_class CabinetWClass
-   ~MButton::Send !{Right} ; middle click to Go Forward
+  ~MButton::Send !{Right} ; middle click to Go Forward
 
 	; F1::Send !{up}
 	^1::Send ^+5 ; List
@@ -30,9 +59,7 @@
   F5::RMApp_NavControlHandler(10)   ; Recycle Bin
   */
 
-  Esc::ExitApp
   ; ShellSpecialFolderConstants:  http://msdn.microsoft.com/en-us/library/windows/desktop/bb774096%28v=vs.85%29.aspx
-
 
   ;===Functions===========================================================================
   /*

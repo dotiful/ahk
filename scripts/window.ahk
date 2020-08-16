@@ -1,10 +1,16 @@
-#a::
-  WinGetClass, class, A
-  MsgBox, The active window's class is "%class%".
+/*
+  Window
 
-  ; WinGetClass, Var ,A
-  ; MsgBox ahk_class %Var%
-  Return
+  Modifiers:
+    +  - Shift
+    ^  - Ctrl
+    #  - Win
+    !  - Alt
+    &  - combine multiple keys
+    <> - left/right key of the pair
+    *  - fire the hotkey even if extra modifiers are being held down
+    ~  - do not block the key's native function
+*/
 
 ; --------------------------------------------------------------
 ; Switch between windows of the same app
@@ -20,42 +26,6 @@
   WinActivateBottom, ahk_class %ActiveClass%
   return
 
-; --------------------------------------------------------------
-; Toggle Hide/Show frontmost window
-; --------------------------------------------------------------
-; Win+Shift+W
-; #+w::
-;   IfWinNotExist, ahk_id %selected_id%
-;   {
-;     If (IsWindow(WinExist("A")) || WinActive("ahk_class ArtRage 3"))
-;       WinGet, selected_id, ID, A
-;     else
-;     {
-;       MsgBox, No window selected
-;         return
-;     }
-;   }
-;   WinGet, WinState, MinMax, ahk_id %selected_id%
-;   If WinState = -1    ; the selected window is minimized
-;   {
-;     WinRestore
-;     selected_id := ""
-;   }
-;   else
-;     WinMinimize
-;   return
-
-;   IsWindow(hwnd){
-;     WinGet, s, Style, ahk_id %hwnd%
-;     return s & 0xC00000 ? (s & 0x100 ? 0 : 1) : 0
-;   }
-
-; --------------------------------------------------------------
-; Hide frontmost Window
-; --------------------------------------------------------------
-; Win+W
-; #w::
-;   ToggleMinimize()
 
 ; --------------------------------------------------------------
 ; Center Window
@@ -74,31 +44,71 @@
 ; --------------------------------------------------------------
 ; Alt+Win+F
 #f::ToggleMaximize()
+#+f::ToggleFullScreen(WinExist("A"))                ; Ctrl+Alt+W to fullscreen the window under the mouse
+
+; --------------------------------------------------------------
+; Toggle Maximize/Restore
+; --------------------------------------------------------------
+#WheelDown::ToggleMaximize()
+#WheelUp::ToggleMaximize()
+#MButton::ToggleMinimize()
+
+; --------------------------------------------------------------
+; Hide frontmost Window
+; --------------------------------------------------------------
+; Win+W
+#w::ToggleMinimize()
+
+; --------------------------------------------------------------
+; Toggle Hide/Show frontmost window
+; --------------------------------------------------------------
+; Win+Shift+W
+#+w::
+  IfWinNotExist, ahk_id %selected_id%
+  {
+    If (IsWindow(WinExist("A")) || WinActive("ahk_class ArtRage 3"))
+      WinGet, selected_id, ID, A
+    else
+    {
+      MsgBox, No window selected
+        return
+    }
+  }
+  WinGet, WinState, MinMax, ahk_id %selected_id%
+  If WinState = -1    ; the selected window is minimized
+  {
+    WinRestore
+    selected_id := ""
+  }
+  else
+    WinMinimize
+  return
+
+  IsWindow(hwnd){
+    WinGet, s, Style, ahk_id %hwnd%
+    return s & 0xC00000 ? (s & 0x100 ? 0 : 1) : 0
+  }
+
+; --------------------------------------------------------------
+; Resize Window by 1/2 - 1/3 - 2/3
+; --------------------------------------------------------------
+; Alt+Win+Left/Right
+!#Left::MoveCycleLeft(-1)
+!#Right::MoveCycleRight(1)
 
 ; --------------------------------------------------------------
 ; Keep a Window on top
 ; --------------------------------------------------------------
 ; Ctrl+Alt+Shift+F - Always on Top
-; ^!+f::
-;   Winset, Alwaysontop, , A
-;   Notify("Alwaysontop", "State toggled")
-;   return
+^!+f::
+  Winset, Alwaysontop, , A
+  Notify("Alwaysontop", "State toggled",-3,"Style=Huge")
+  ; Notify(Settings.ScriptName " Started",,-3,"Style=StandardGray")
+  return
 
 ; --------------------------------------------------------------
-; Toggle Maximize/Restore
+; helper functions
 ; --------------------------------------------------------------
-; #WheelDown::
-;   ToggleMaximize()
-;   return
-
-; #WheelUp::
-;   ToggleMaximize()
-;   return
-
-; #MButton::
-;   ToggleMinimize()
-;   return
-
 ToggleMinimize() {
   lastWindows:=[]
   lastWindows.Insert(lastWindow:=WinExist("A"))
@@ -124,116 +134,94 @@ ToggleMaximize() {
    WinMaximize, A
 }
 
-; ; FWT - Fullscreen window toggle
-; ; https://autohotkey.com/boards/viewtopic.php?p=123166#p123166
-; FWT(hwnd:="") {
-;     static MONITOR_DEFAULTTONEAREST := 0x00000002
-;     static WS_CAPTION               := 0x00C00000
-;     static WS_SIZEBOX               := 0x00040000
-;     static WindowStyle              := WS_CAPTION|WS_SIZEBOX
-;     static A                        := []
-;     if (!hwnd)                    ; If no window handle is supplied, use the window under the mouse
-;         MouseGetPos,,, hwnd
-;     Win := "ahk_id " hwnd                                                          ; Store WinTitle
-;     WinGet, S, Style, % Win                                                      ; Get window style
-;     if (S & WindowStyle) {                                                      ; If not borderless
-;         A[Win, "Style"] := S & WindowStyle                                   ; Store existing style
-;         WinGet, IsMaxed, MinMax, % Win                  ; Get/store whether the window is maximized
-;         if (A[Win, "Maxed"] := IsMaxed = 1 ? true : false)
-;             WinRestore, % Win
-;         WinGetPos, X, Y, W, H, % Win                                   ; Store window size/location
-;         A[Win, "X"] := X, A[Win, "Y"] := Y, A[Win, "W"] := W, A[Win, "H"] := H
-;         WinSet, Style, % -WindowStyle, % Win                                       ; Remove borders
-;         hMon := DllCall("User32\MonitorFromWindow", "Ptr", hwnd, "UInt", MONITOR_DEFAULTTONEAREST)
-;         VarSetCapacity(monInfo, 40), NumPut(40, monInfo, 0, "UInt")
-;         DllCall("User32\GetMonitorInfo", "Ptr", hMon, "Ptr", &monInfo)
-;         WinMove, % Win,,  monLeft   := NumGet(monInfo,  4, "Int")          ; Move and resize window
-;                        ,  monTop    := NumGet(monInfo,  8, "Int")
-;                        , (monRight  := NumGet(monInfo, 12, "Int")) - monLeft
-;                        , (monBottom := NumGet(monInfo, 16, "Int")) - monTop
-;     }
-;     else if A[Win] {                                                                ; If borderless
-;         WinSet, Style, % "+" A[Win].Style, % Win                                  ; Reapply borders
-;         WinMove, % Win,, A[Win].X, A[Win].Y, A[Win].W, A[Win].H       ; Return to original position
-;         if (A[Win].Maxed)                                                    ; Maximize if required
-;             WinMaximize, % Win
-;         A.Delete(Win)
-;     }
-; }
+; FWT - Fullscreen window toggle
+; https://autohotkey.com/boards/viewtopic.php?p=123166#p123166
+ToggleFullScreen(hwnd:="") {
+  static MONITOR_DEFAULTTONEAREST := 0x00000002
+  static WS_CAPTION               := 0x00C00000
+  static WS_SIZEBOX               := 0x00040000
+  static WindowStyle              := WS_CAPTION|WS_SIZEBOX
+  static A                        := []
+  if (!hwnd)                    ; If no window handle is supplied, use the window under the mouse
+    MouseGetPos,,, hwnd
+  Win := "ahk_id " hwnd                                                          ; Store WinTitle
+  WinGet, S, Style, % Win                                                      ; Get window style
+  if (S & WindowStyle) {                                                      ; If not borderless
+    A[Win, "Style"] := S & WindowStyle                                   ; Store existing style
+    WinGet, IsMaxed, MinMax, % Win                  ; Get/store whether the window is maximized
+    if (A[Win, "Maxed"] := IsMaxed = 1 ? true : false)
+        WinRestore, % Win
+    WinGetPos, X, Y, W, H, % Win                                   ; Store window size/location
+    A[Win, "X"] := X, A[Win, "Y"] := Y, A[Win, "W"] := W, A[Win, "H"] := H
+    WinSet, Style, % -WindowStyle, % Win                                       ; Remove borders
+    hMon := DllCall("User32\MonitorFromWindow", "Ptr", hwnd, "UInt", MONITOR_DEFAULTTONEAREST)
+    VarSetCapacity(monInfo, 40), NumPut(40, monInfo, 0, "UInt")
+    DllCall("User32\GetMonitorInfo", "Ptr", hMon, "Ptr", &monInfo)
+    WinMove, % Win,,  monLeft   := NumGet(monInfo,  4, "Int")          ; Move and resize window
+                   ,  monTop    := NumGet(monInfo,  8, "Int")
+                   , (monRight  := NumGet(monInfo, 12, "Int")) - monLeft
+                   , (monBottom := NumGet(monInfo, 16, "Int")) - monTop
+  }
+  else if A[Win] {                                                                ; If borderless
+    WinSet, Style, % "+" A[Win].Style, % Win                                  ; Reapply borders
+    WinMove, % Win,, A[Win].X, A[Win].Y, A[Win].W, A[Win].H       ; Return to original position
+    if (A[Win].Maxed)                                                    ; Maximize if required
+      WinMaximize, % Win
+    A.Delete(Win)
+  }
+}
 
-; ; #w::FWT(WinExist("A"))    ; Win+W to fullscreen the active window
-; !^w::FWT(WinExist("A"))                ; Ctrl+Alt+W to fullscreen the window under the mouse
-
-
-; #RButton::
-;   WinGet, Stat, MinMax, A
-;   if Stat = 1
-;     WinMinimize, A
-; return
-
-; --------------------------------------------------------------
 ; Resize Window by 1/2 - 1/3 - 2/3
-; --------------------------------------------------------------
-; Alt+Win+Left
-; !#Left::
-; 	MoveCycleLeft(-1)
-;   return
+MoveCycleLeft(Add) {
+	static SizeCycle = 0
+	SizeCycle := Mod(SizeCycle + Add, 3)
+	if (SizeCycle < 0) {
+		SizeCycle := SizeCycle + 3
+	}
 
-; ; Alt+Win+Right
-; !#Right::
-; 	MoveCycleRight(1)
-;   return
+	if (SizeCycle = 0) {
+		MoveWindow(0, 33.3333)
+	}
+	else if (SizeCycle = 1) {
+		MoveWindow(0, 66.6666)
+	}
+	else if (SizeCycle = 2) {
+		MoveWindow(0, 50)
+	}
+}
 
-; MoveCycleLeft(Add) {
-; 	static SizeCycle = 0
-; 	SizeCycle := Mod(SizeCycle + Add, 3)
-; 	if (SizeCycle < 0) {
-; 		SizeCycle := SizeCycle + 3
-; 	}
+MoveCycleRight(Add) {
+	static SizeCycle = 0
+	SizeCycle := Mod(SizeCycle + Add, 3)
 
-; 	if (SizeCycle = 0) {
-; 		MoveWindow(0, 33.3333)
-; 	}
-; 	else if (SizeCycle = 1) {
-; 		MoveWindow(0, 66.6666)
-; 	}
-; 	else if (SizeCycle = 2) {
-; 		MoveWindow(0, 50)
-; 	}
-; }
+  if (SizeCycle = 0) {
+    MoveWindow(33.3333, 66.6666)
+	}
+	else if (SizeCycle = 1) {
+		MoveWindow(66.6666, 33.3333)
+	}
+	else if (SizeCycle = 2) {
+		MoveWindow(50, 50)
+	}
+}
 
-; MoveCycleRight(Add) {
-; 	static SizeCycle = 0
-; 	SizeCycle := Mod(SizeCycle + Add, 3)
+MoveWindow(XP, WP) {
+	;Get current Window
+	WinGetActiveTitle, WinTitle
+	WinGetPos, X, Y, WinWidth, WinHeight, %WinTitle%
 
-;   if (SizeCycle = 0) {
-;     MoveWindow(33.3333, 66.6666)
-; 	}
-; 	else if (SizeCycle = 1) {
-; 		MoveWindow(66.6666, 33.3333)
-; 	}
-; 	else if (SizeCycle = 2) {
-; 		MoveWindow(50, 50)
-; 	}
-; }
+	;Get Taskbar height
+	WinGetPos,,, tbW, tbH, ahk_class Shell_TrayWnd
 
-; MoveWindow(XP, WP) {
-; 	;Get current Window
-; 	WinGetActiveTitle, WinTitle
-; 	WinGetPos, X, Y, WinWidth, WinHeight, %WinTitle%
+	;Calculate new position and size
+	XNew := (A_ScreenWidth * XP / 100)
+	WNew := (A_ScreenWidth * WP / 100)
+	HNew := (A_ScreenHeight - tbH)
 
-; 	;Get Taskbar height
-; 	WinGetPos,,, tbW, tbH, ahk_class Shell_TrayWnd
-
-; 	;Calculate new position and size
-; 	XNew := (A_ScreenWidth * XP / 100)
-; 	WNew := (A_ScreenWidth * WP / 100)
-; 	HNew := (A_ScreenHeight - tbH)
-
-; 	;MsgBox, %XNew% - %WNew%
-; 	WinRestore, %WinTitle%
-; 	WinMove, %WinTitle%,, %XNew%, 0, %WNew%, %HNew%
-; }
+	;MsgBox, %XNew% - %WNew%
+	WinRestore, %WinTitle%
+	WinMove, %WinTitle%,, %XNew%, 0, %WNew%, %HNew%
+}
 
 ; Ctrl+Alt+scroll transparency
 ; {
@@ -359,8 +347,12 @@ ToggleMaximize() {
 ; 		KDE_Y1 := (KDE_Y2 + KDE_Y1)
 ; 	}
 ; 	return
-
 ; }
 
+
+; #RButton::
+;   WinGet, Stat, MinMax, A
+;   if Stat = 1
+;     WinMinimize, A
 ; return
 

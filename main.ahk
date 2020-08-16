@@ -5,6 +5,12 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
+FullFilePath := A_ScriptDir . "\local.ahk"
+If FileExist(FullFilePath)
+{
+  #Include *i local.ahk
+}
+
 #Include *i %A_ScriptDir%\scripts\functions.ahk
 #Include %A_ScriptDir%\util\init.ahk
 #Include %A_ScriptDir%\util\parsesettings.ahk
@@ -26,3 +32,4 @@ Else
 #Include *i %A_ScriptDir%\scripts\hotstrings.ahk
 #Include *i %A_ScriptDir%\scripts\window.ahk
 #Include *i %A_ScriptDir%\scripts\media.ahk
+
