@@ -13,3 +13,6 @@
 [submodule "ext/panel"]
 	path = ext/panel
 	url = https://github.com/Joonikko/Panel
+[submodule "tmp/ext/emojione"]
+	path = tmp/ext/emojione
+	url = https://gitlab.com/smart-autohotkey/emojione

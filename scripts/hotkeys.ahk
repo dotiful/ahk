@@ -35,7 +35,6 @@
 #3::ListHotkeys
 #4::KeyHistory
 
-
 ; --------------------------------------------------------------
 ; Base remmaping
 ; --------------------------------------------------------------
@@ -55,3 +54,9 @@ LShift & RShift::CapsLock
   FileRecycleEmpty
   SoundPlay, %A_ScriptDir%\sounds\recycle.wav
   return
+
+^!+r::
+  MsgBox, 262180, AutoHotkey, Would you like to restart your PC now?
+  IfMsgBox, Yes
+    ShutDown, 2 ;reboot
+  Return

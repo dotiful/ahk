@@ -23,34 +23,39 @@
 ; Alt+Shift+L Open Downloads folder
 !+l::Run "C:\Users\%A_UserName%\Downloads"
 
+; Alt+Shift+P Open PortableApps folder
+; !+p::Run "E:\PortableApps"
+
 ;!+d::Run "C:\Users\%A_UserName%\dev"
 ; LControl & RAlt::Send {Alt}
 
 
 #IfWinActive, ahk_class CabinetWClass
-  ~MButton::Send !{Right} ; middle click to Go Forward
+  ~MButton::Send  !{Right} ; middle click to Go Forward
+  !XButton1::Send !{Up}    ; alt+mouse-back click to Go Up
 
-	; F1::Send !{up}
-	^1::Send ^+5 ; List
-	^2::Send ^+6 ; Details
-	^3::Send ^+4 ; Small Icons
-	^4::Send ^+7 ; Tiles
-	^5::Send ^+3 ; Medium Icons
-	^6::Send ^+2 ; Large icons
-	^7::Send ^+8 ; Content
-	^8::Send ^+1 ; Extra large icons
+	^1::Send ^+5             ; List
+	^2::Send ^+6             ; Details
+	^3::Send ^+4             ; Small Icons
+	^4::Send ^+7             ; Tiles
+	^5::Send ^+3             ; Medium Icons
+	^6::Send ^+2             ; Large icons
+	^7::Send ^+8             ; Content
+	^8::Send ^+1             ; Extra large icons
 
-  !n::Send !d!vn{enter}ln ; toggle sidebar
-  !p::Send !d!vp          ; toggle preview
+  !n::Send !d!vn{enter}ln  ; toggle sidebar
+  !p::Send !d!vp           ; toggle preview
+  !h::Send !v!hh           ; toggle hidden
 
-  ^l::ControlClick,ToolbarWindow
-
+  ^l::ControlClick, ToolbarWindow
 
   ;=== Hotkeys for testing ===
-  !+e::RMApp_NavControlHandler("D:\")
-  !+p::RMApp_NavControlHandler("E:\PortableApps")
-  !+i::RMApp_NavControlHandler("D:\install")
-  !+c::RMApp_NavControlHandler("C:\Users\art\code")
+  +h::RMApp_NavControlHandler("C:\Users\art")
+  +c::RMApp_NavControlHandler("C:\Users\art\code")
+  +d::RMApp_NavControlHandler("C:\Users\art\Downloads")
+  +e::RMApp_NavControlHandler("D:\")
+  +p::RMApp_NavControlHandler("E:\PortableApps")
+  +i::RMApp_NavControlHandler("D:\install")
 
   /*
   F2::RMApp_NavControlHandler(A_MyDocuments)
@@ -59,16 +64,13 @@
   F5::RMApp_NavControlHandler(10)   ; Recycle Bin
   */
 
-  ; ShellSpecialFolderConstants:  http://msdn.microsoft.com/en-us/library/windows/desktop/bb774096%28v=vs.85%29.aspx
-
-  ;===Functions===========================================================================
   /*
-  Part of Radial menu codes posted by Learning one.
-  http://www.autohotkey.com/board/topic/46856-radial-menu-scripts/
-  http://ahkscript.org/boards/viewtopic.php?p=4673#p4673
-
-  RM's Navigator is a drop down menu which helps you to easily navigate to folders that you often use.
-  It navigates to your favorite folders in Windows explorer, My Computer, and in other standard Open, Save, Export, Import, Upload, Select dialog windows.
+  ; Part of Radial menu codes posted by Learning one.
+  ; http://www.autohotkey.com/board/topic/46856-radial-menu-scripts/
+  ; http://ahkscript.org/boards/viewtopic.php?p=4673#p4673
+  ; RM's Navigator is a drop down menu which helps you to easily navigate to folders that you often use.
+  ; It navigates to your favorite folders in Windows explorer, My Computer, and in other standard Open, Save, Export, Import, Upload, Select dialog windows.
+  ; ShellSpecialFolderConstants:  http://msdn.microsoft.com/en-us/library/windows/desktop/bb774096%28v=vs.85%29.aspx
   */
 
   RMApp_NavControlHandler(FolderPath, hwnd="", FocusedControl="") {

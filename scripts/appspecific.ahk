@@ -27,7 +27,7 @@
 #Include %A_ScriptDir%\appspecific\chrome.ahk
 #Include %A_ScriptDir%\appspecific\cmd.ahk
 #Include %A_ScriptDir%\appspecific\explorer.ahk
-; #Include %A_ScriptDir%\appspecific\telegram.ahk
+#Include %A_ScriptDir%\appspecific\telegram.ahk
 
 #a::
   WinGetClass, active_class, A
@@ -48,6 +48,8 @@
   ; MsgBox ahk_class %Var%
   ; Return
 
+; ctrl+alt+c
+^!w:: OpenOrShowAppBasedOnExeName("sublime_text.exe")
 
 ; --------------------------------------------------------------
 ; CmdQuit
@@ -55,9 +57,9 @@
 ; Alt+Q - quit
 if WinExist("ahk_class TaskManagerWindow") or WinExist("ahk_class CabinetWClass") or WinExist("ahk_class ConsoleWindowClass") or WinExist("ahk_class MMCMainFrame")
   !q::
-    WinGet, process_id, ProcessName, A
-    Process, close, %process_id%
-    ; Send, {Alt Down}{F4 Down}{F4 Up}{Alt Up}
+    ; WinGet, process_id, ProcessName, A
+    ; Process, close, %process_id%
+    Send, {Alt Down}{F4 Down}{F4 Up}{Alt Up}
     return
 
 
