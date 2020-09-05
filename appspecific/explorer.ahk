@@ -31,6 +31,9 @@
 
 
 #IfWinActive, ahk_class CabinetWClass
+  !1::Send  !{Left} ; middle click to Go Forward
+  !+1::Send  !{Up} ; middle click to Go Forward
+  !2::Send  !{Right} ; middle click to Go Forward
   ~MButton::Send  !{Right} ; middle click to Go Forward
   !XButton1::Send !{Up}    ; alt+mouse-back click to Go Up
 
