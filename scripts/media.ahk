@@ -30,7 +30,7 @@ F12::Send         {Volume_Up}                      ; Alt+F12
 !WheelUp::Send    {LWin down}{=}{LWin up}          ; Ctrl+Shift+Scroll up
 !WheelDown::Send  {LWin down}{-}{LWin up}          ; Ctrl+Shift+Scroll down
 
-#If MouseIsOver("ahk_class Shell_TrayWnd")
-  WheelUp::Send   {Volume_Up}
-  WheelDown::Send {Volume_Down}
-  MButton::Send   {Volume_Mute}
+; #If MouseIsOver("Shell_TrayWnd")
+;   WheelUp::Send   {Volume_Up}
+;   WheelDown::Send {Volume_Down}
+;   MButton::Send   {Volume_Mute}

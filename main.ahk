@@ -32,4 +32,4 @@ If FileExist(FullFilePath)
 #Include *i %A_ScriptDir%\scripts\hotstrings.ahk
 #Include *i %A_ScriptDir%\scripts\media.ahk
 #Include *i %A_ScriptDir%\scripts\window.ahk
-; #Include local.ahk
+#Include *i local.ahk

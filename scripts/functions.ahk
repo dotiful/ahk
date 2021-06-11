@@ -19,6 +19,7 @@ Edit(file) {
 }
 
 MouseIsOver(WinTitle) {
-  MouseGetPos,,, Win
-  return WinExist(WinTitle . " ahk_id " . Win)
+  MouseGetPos,,,WinID
+  WinGetClass, WinClass, ahk_id %WinID%
+  return WinClass=WinTitle
 }
