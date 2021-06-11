@@ -125,13 +125,11 @@ ToggleMinimize() {
 }
 
 ToggleMaximize() {
-  if (WinActive("ahk_class Progman") || WinActive("ahk_Class DV2ControlHost") || (WinActive("Start") && WinActive("ahk_class Button")) || WinActive("ahk_class Shell_TrayWnd"))
-    return
-  WinGet, Stat, MinMax, A
-  if Stat = 1
-    WinRestore, A
-  else
-   WinMaximize, A
+  WinGet MX, MinMax, A
+  if MX
+    WinRestore A
+  else WinMaximize A
+  return
 }
 
 ; FWT - Fullscreen window toggle
